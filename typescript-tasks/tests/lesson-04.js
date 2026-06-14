@@ -1,0 +1,77 @@
+import { readFileSync } from "fs";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+import {
+  test,
+  assert,
+  checkBehavior,
+  withIndicator,
+  normalize,
+  runCompileGate,
+  summary,
+} from "./lib/utils.js";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const root = join(__dirname, "..");
+
+function read(relPath) {
+  try {
+    return normalize(readFileSync(join(root, relPath), "utf8"));
+  } catch {
+    return null;
+  }
+}
+
+console.log("\nSearching\n");
+
+runCompileGate(root, { tsconfig: "tsconfig.03.json" });
+
+const src = read("03-searching/search.ts");
+
+test("search.ts exists", () => {
+  assert(src !== null, "03-searching/search.ts not found");
+});
+
+test("linearSearch is exported", () => {
+  assert(
+    src && src.includes("linearSearch"),
+    "linearSearch is not defined — add a function named linearSearch",
+  );
+});
+
+test("binarySearch is exported", () => {
+  assert(
+    src && src.includes("binarySearch"),
+    "binarySearch is not defined — add a function named binarySearch",
+  );
+});
+
+test("linearSearch uses a loop (not Array methods)", () => {
+  assert(
+    src && src.includes("for") && !src.match(/\.indexOf|\.find\b|\.includes\b/),
+    "linearSearch should use a loop, not built-in Array search methods",
+  );
+});
+
+test("binarySearch uses numeric comparison (not localeCompare)", () => {
+  assert(
+    src &&
+      !src.includes("localeCompare") &&
+      (src.includes("<") || src.includes(">")),
+    "binarySearch should compare numbers with < and >, not localeCompare",
+  );
+});
+
+test("Both functions return correct results", () => {
+  const result = withIndicator("Running tests...", () =>
+    checkBehavior(root, "tests/lib/searching.behavior.ts"),
+  );
+  if (result.timedOut) {
+    throw new Error(
+      "Timed out after 8s — check for an infinite loop in your implementation",
+    );
+  }
+  assert(result.ok, result.output ? `\n${result.output}` : "Behavioral tests failed");
+});
+
+summary("cTluLWJ2dzM=");

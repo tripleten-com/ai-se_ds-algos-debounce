@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "noEmit": true
+  },
+  "include": [
+    "02-map-set/**/*.ts",
+    "03-searching/**/*.ts",
+    "04-debouncing/**/*.ts"
+  ]
+}
