@@ -1,0 +1,15 @@
+{
+  "name": "typescript-tasks",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "test:map-set": "node tests/map-set.js",
+    "test:searching": "node tests/searching.js",
+    "test:debouncing": "node tests/debouncing.js"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.3",
+    "typescript": "^5.5.3"
+  }
+}
