@@ -71,14 +71,14 @@ test("logLevels is built from the logs array (not hardcoded)", () => {
   );
 });
 
-test("capitalByCountry is built from the capitals array (not hardcoded)", () => {
+test("capitalByCountry is built from the countries array (not hardcoded)", () => {
   assert(
-    src && src.includes("capitals") && src.includes(".capital"),
-    "capitalByCountry should be built by iterating over the capitals array",
+    src && src.includes("countries.map"),
+    "capitalByCountry should be built by mapping over the countries array",
   );
 });
 
-test("uniqueRoles and userById have correct values", () => {
+test("logLevels and capitalsByCountry have correct values", () => {
   const result = checkBehavior(root, "tests/lib/map-set.behavior.ts");
   assert(
     result.ok,
