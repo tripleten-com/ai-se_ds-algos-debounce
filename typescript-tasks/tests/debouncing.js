@@ -44,10 +44,10 @@ if (!compiled.ok) {
 }
 console.log("✅ Project compiles without type errors\n");
 
-const src = read("debouncing/debounce.ts");
+const src = read("04-debouncing/debounce.ts");
 
 test("debounce.ts exists", () => {
-  assert(src !== null, "debouncing/debounce.ts not found");
+  assert(src !== null, "04-debouncing/debounce.ts not found");
 });
 
 test("debounce is exported", () => {

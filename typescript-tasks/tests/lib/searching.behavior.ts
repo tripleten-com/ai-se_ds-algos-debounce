@@ -1,4 +1,4 @@
-import { linearSearch, binarySearch } from "../../searching/search.ts";
+import { linearSearch, binarySearch } from "../../03-searching/search.ts";
 
 function assert(condition: boolean, message: string): void {
   if (!condition) {
@@ -18,10 +18,7 @@ assert(
   linearSearch(scores, 100) === -1,
   `linearSearch([${scores}], 100) should return -1`,
 );
-assert(
-  linearSearch([], 5) === -1,
-  "linearSearch([], 5) should return -1",
-);
+assert(linearSearch([], 5) === -1, "linearSearch([], 5) should return -1");
 assert(
   linearSearch(scores, 5) === 3,
   `linearSearch([${scores}], 5) should return 3`,
@@ -35,10 +32,7 @@ assert(
   binarySearch(sortedScores, 100) === -1,
   `binarySearch([${sortedScores}], 100) should return -1`,
 );
-assert(
-  binarySearch([], 5) === -1,
-  "binarySearch([], 5) should return -1",
-);
+assert(binarySearch([], 5) === -1, "binarySearch([], 5) should return -1");
 assert(
   binarySearch(sortedScores, 5) === 0,
   `binarySearch([${sortedScores}], 5) should return 0`,

@@ -44,10 +44,10 @@ if (!compiled.ok) {
 }
 console.log("✅ Project compiles without type errors\n");
 
-const src = read("searching/search.ts");
+const src = read("03-searching/search.ts");
 
 test("search.ts exists", () => {
-  assert(src !== null, "searching/search.ts not found");
+  assert(src !== null, "03-searching/search.ts not found");
 });
 
 test("linearSearch is exported", () => {

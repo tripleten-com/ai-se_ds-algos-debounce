@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "test:map-set": "node tests/map-set.js",
-    "test:searching": "node tests/searching.js",
-    "test:debouncing": "node tests/debouncing.js"
+    "test:02": "node tests/map-set.js",
+    "test:03": "node tests/searching.js",
+    "test:04": "node tests/debouncing.js"
   },
   "devDependencies": {
     "tsx": "^4.19.3",

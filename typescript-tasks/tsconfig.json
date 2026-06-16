@@ -7,9 +7,8 @@
     "noEmit": true
   },
   "include": [
-    "big-o/**/*.ts",
-    "map-set/**/*.ts",
-    "searching/**/*.ts",
-    "debouncing/**/*.ts"
+    "02-map-set/**/*.ts",
+    "03-searching/**/*.ts",
+    "04-debouncing/**/*.ts"
   ]
 }

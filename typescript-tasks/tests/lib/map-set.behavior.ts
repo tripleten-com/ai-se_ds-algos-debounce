@@ -1,4 +1,4 @@
-import { logLevels, capitalByCountry } from '../../map-set/map-set.ts';
+import { logLevels, capitalByCountry } from '../../02-map-set/map-set.ts';
 
 function assert(condition: boolean, message: string): void {
   if (!condition) {

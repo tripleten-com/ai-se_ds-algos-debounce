@@ -1,4 +1,4 @@
-import { debounce } from "../../debouncing/debounce.ts";
+import { debounce } from "../../04-debouncing/debounce.ts";
 
 function assert(condition: boolean, message: string): void {
   if (!condition) {

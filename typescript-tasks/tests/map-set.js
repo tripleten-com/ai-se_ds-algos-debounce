@@ -44,10 +44,10 @@ if (!compiled.ok) {
 }
 console.log("✅ Project compiles without type errors\n");
 
-const src = read("map-set/map-set.ts");
+const src = read("02-map-set/map-set.ts");
 
 test("map-set.ts exists", () => {
-  assert(src !== null, "map-set/map-set.ts not found");
+  assert(src !== null, "02-map-set/map-set.ts not found");
 });
 
 test("logLevels is exported and uses Set", () => {
