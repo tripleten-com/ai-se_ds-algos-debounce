@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
-import { checkCompiles, checkBehavior, normalize } from "./lib/utils.js";
+import { checkCompiles, checkBehavior, withIndicator, normalize } from "./lib/utils.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
@@ -34,7 +34,7 @@ function assert(condition, message) {
 
 console.log("\nSearching\n");
 
-const compiled = checkCompiles(root);
+const compiled = withIndicator('Checking TypeScript...', () => checkCompiles(root, { tsconfig: 'tsconfig.03.json' }));
 if (!compiled.ok) {
   console.log(
     "❌ TypeScript compilation failed — fix all type errors before running tests\n",
@@ -79,11 +79,11 @@ test("binarySearch uses numeric comparison (not localeCompare)", () => {
 });
 
 test("Both functions return correct results", () => {
-  const result = checkBehavior(root, "tests/lib/searching.behavior.ts");
-  assert(
-    result.ok,
-    "Behavioral tests failed — run `npx tsx tests/lib/searching.behavior.ts` to debug",
-  );
+  const result = withIndicator('Running tests...', () => checkBehavior(root, "tests/lib/searching.behavior.ts"));
+  if (result.timedOut) {
+    throw new Error("Timed out after 8s — check for an infinite loop in your implementation");
+  }
+  assert(result.ok, result.output ? `\n${result.output}` : "Behavioral tests failed");
 });
 
 console.log(`\n${pass} passed, ${fail} failed`);

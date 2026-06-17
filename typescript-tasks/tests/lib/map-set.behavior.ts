@@ -2,8 +2,7 @@ import { logLevels, capitalByCountry } from '../../02-map-set/map-set.ts';
 
 function assert(condition: boolean, message: string): void {
   if (!condition) {
-    console.error(`  Assertion failed: ${message}`);
-    process.exit(1);
+    throw new Error(`Assertion failed: ${message}`);
   }
 }
 

@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
-import { checkCompiles, checkBehavior, normalize } from "./lib/utils.js";
+import { checkCompiles, checkBehavior, withIndicator, normalize } from "./lib/utils.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
@@ -34,7 +34,7 @@ function assert(condition, message) {
 
 console.log("\nDebouncing\n");
 
-const compiled = checkCompiles(root);
+const compiled = withIndicator('Checking TypeScript...', () => checkCompiles(root, { tsconfig: 'tsconfig.04.json' }));
 if (!compiled.ok) {
   console.log(
     "❌ TypeScript compilation failed — fix all type errors before running tests\n",
@@ -73,11 +73,11 @@ test("debounce uses clearTimeout", () => {
 });
 
 test("Leading-edge behavior is correct", () => {
-  const result = checkBehavior(root, "tests/lib/debouncing.behavior.ts");
-  assert(
-    result.ok,
-    "Behavioral tests failed — run `npx tsx tests/lib/debouncing.behavior.ts` to debug",
-  );
+  const result = withIndicator('Running tests...', () => checkBehavior(root, "tests/lib/debouncing.behavior.ts"));
+  if (result.timedOut) {
+    throw new Error("Timed out after 8s — check for an infinite loop in your implementation");
+  }
+  assert(result.ok, result.output ? `\n${result.output}` : "Behavioral tests failed");
 });
 
 console.log(`\n${pass} passed, ${fail} failed`);

@@ -1,0 +1,1 @@
+{ "extends": "./tsconfig.json", "include": ["03-searching/**/*.ts"] }
