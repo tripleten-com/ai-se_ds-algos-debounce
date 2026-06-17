@@ -53,7 +53,7 @@ export function checkBehavior(root, testFile, { timeout = 8000 } = {}) {
   // handler writes synchronously to stderr before exit, so the message is always
   // captured. Find the 'Error: ...' line and strip the 'Error: ' prefix.
   const errorLine = (proc.stderr ?? '').split('\n')
-    .find((l) => l.includes('Assertion failed:'));
+    .find((l) => l.trimStart().startsWith('Error: Assertion failed:'));
   const output = errorLine?.replace(/^Error:\s*/, '').trim()
     ?? (proc.stderr ?? '').trim()
     ?? '';
