@@ -1,7 +1,15 @@
 import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
-import { checkCompiles, checkBehavior, withIndicator, normalize } from "./lib/utils.js";
+import {
+  test,
+  assert,
+  checkBehavior,
+  withIndicator,
+  normalize,
+  runCompileGate,
+  summary,
+} from "./lib/utils.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
@@ -14,35 +22,9 @@ function read(relPath) {
   }
 }
 
-let pass = 0;
-let fail = 0;
-
-function test(label, fn) {
-  try {
-    fn();
-    console.log(`✅ ${label}`);
-    pass++;
-  } catch (err) {
-    console.log(`❌ ${label} — ${err.message}`);
-    fail++;
-  }
-}
-
-function assert(condition, message) {
-  if (!condition) throw new Error(message);
-}
-
 console.log("\nDebouncing\n");
 
-const compiled = withIndicator('Checking TypeScript...', () => checkCompiles(root, { tsconfig: 'tsconfig.04.json' }));
-if (!compiled.ok) {
-  console.log(
-    "❌ TypeScript compilation failed — fix all type errors before running tests\n",
-  );
-  console.log(compiled.output);
-  process.exit(1);
-}
-console.log("✅ Project compiles without type errors\n");
+runCompileGate(root, { tsconfig: "tsconfig.04.json" });
 
 const src = read("04-debouncing/debounce.ts");
 
@@ -73,16 +55,15 @@ test("debounce uses clearTimeout", () => {
 });
 
 test("Leading-edge behavior is correct", () => {
-  const result = withIndicator('Running tests...', () => checkBehavior(root, "tests/lib/debouncing.behavior.ts"));
+  const result = withIndicator("Running tests...", () =>
+    checkBehavior(root, "tests/lib/debouncing.behavior.ts"),
+  );
   if (result.timedOut) {
-    throw new Error("Timed out after 8s — check for an infinite loop in your implementation");
+    throw new Error(
+      "Timed out after 8s — check for an infinite loop in your implementation",
+    );
   }
   assert(result.ok, result.output ? `\n${result.output}` : "Behavioral tests failed");
 });
 
-console.log(`\n${pass} passed, ${fail} failed`);
-if (fail === 0) {
-  const code = Buffer.from("dnMwNWRlYm91bmNl", "base64").toString();
-  console.log(`\nVerification code: ${code}`);
-}
-if (fail > 0) process.exit(1);
+summary("dnMwNWRlYm91bmNl");

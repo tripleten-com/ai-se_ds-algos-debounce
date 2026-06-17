@@ -1,7 +1,15 @@
 import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
-import { checkCompiles, checkBehavior, withIndicator, normalize } from "./lib/utils.js";
+import {
+  test,
+  assert,
+  checkBehavior,
+  withIndicator,
+  normalize,
+  runCompileGate,
+  summary,
+} from "./lib/utils.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
@@ -14,35 +22,9 @@ function read(relPath) {
   }
 }
 
-let pass = 0;
-let fail = 0;
-
-function test(label, fn) {
-  try {
-    fn();
-    console.log(`✅ ${label}`);
-    pass++;
-  } catch (err) {
-    console.log(`❌ ${label} — ${err.message}`);
-    fail++;
-  }
-}
-
-function assert(condition, message) {
-  if (!condition) throw new Error(message);
-}
-
 console.log("\nSearching\n");
 
-const compiled = withIndicator('Checking TypeScript...', () => checkCompiles(root, { tsconfig: 'tsconfig.03.json' }));
-if (!compiled.ok) {
-  console.log(
-    "❌ TypeScript compilation failed — fix all type errors before running tests\n",
-  );
-  console.log(compiled.output);
-  process.exit(1);
-}
-console.log("✅ Project compiles without type errors\n");
+runCompileGate(root, { tsconfig: "tsconfig.03.json" });
 
 const src = read("03-searching/search.ts");
 
@@ -73,22 +55,23 @@ test("linearSearch uses a loop (not Array methods)", () => {
 
 test("binarySearch uses numeric comparison (not localeCompare)", () => {
   assert(
-    src && !src.includes("localeCompare") && (src.includes("<") || src.includes(">")),
+    src &&
+      !src.includes("localeCompare") &&
+      (src.includes("<") || src.includes(">")),
     "binarySearch should compare numbers with < and >, not localeCompare",
   );
 });
 
 test("Both functions return correct results", () => {
-  const result = withIndicator('Running tests...', () => checkBehavior(root, "tests/lib/searching.behavior.ts"));
+  const result = withIndicator("Running tests...", () =>
+    checkBehavior(root, "tests/lib/searching.behavior.ts"),
+  );
   if (result.timedOut) {
-    throw new Error("Timed out after 8s — check for an infinite loop in your implementation");
+    throw new Error(
+      "Timed out after 8s — check for an infinite loop in your implementation",
+    );
   }
   assert(result.ok, result.output ? `\n${result.output}` : "Behavioral tests failed");
 });
 
-console.log(`\n${pass} passed, ${fail} failed`);
-if (fail === 0) {
-  const code = Buffer.from("dnMwNXNlYXJjaA==", "base64").toString();
-  console.log(`\nVerification code: ${code}`);
-}
-if (fail > 0) process.exit(1);
+summary("dnMwNXNlYXJjaA==");
