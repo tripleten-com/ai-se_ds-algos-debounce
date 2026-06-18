@@ -1,8 +1,5 @@
 import { useState, useRef } from "react";
-import {
-  debounceLeading,
-  debounceTrailing,
-} from "../../utils/debounce-complete";
+import { debounceLeading, debounceTrailing } from "../../utils/debounce";
 
 import "./ProfileList.css";
 
