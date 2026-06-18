@@ -1,14 +1,14 @@
-import './ProfileList.css';
+import "./ProfileList.css";
 
 const profiles = [
-  { id: 'p1', name: 'Alice Johnson', email: 'alice@example.com' },
-  { id: 'p2', name: 'Bob Smith', email: 'bob@example.com' },
-  { id: 'p3', name: 'Carol White', email: 'carol@example.com' },
-  { id: 'p4', name: 'David Brown', email: 'david@example.com' },
-  { id: 'p5', name: 'Eve Davis', email: 'eve@example.com' },
-  { id: 'p6', name: 'Frank Wilson', email: 'frank@example.com' },
-  { id: 'p7', name: 'Grace Lee', email: 'grace@example.com' },
-  { id: 'p8', name: 'Henry Martinez', email: 'henry@example.com' },
+  { id: "p1", name: "Alice Johnson", email: "alice@example.com" },
+  { id: "p2", name: "Bob Smith", email: "bob@example.com" },
+  { id: "p3", name: "Carol White", email: "carol@example.com" },
+  { id: "p4", name: "David Brown", email: "david@example.com" },
+  { id: "p5", name: "Eve Davis", email: "eve@example.com" },
+  { id: "p6", name: "Frank Wilson", email: "frank@example.com" },
+  { id: "p7", name: "Grace Lee", email: "grace@example.com" },
+  { id: "p8", name: "Henry Martinez", email: "henry@example.com" },
 ];
 
 export default function ProfileList() {
