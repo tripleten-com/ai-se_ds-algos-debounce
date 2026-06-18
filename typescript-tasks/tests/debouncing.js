@@ -66,4 +66,4 @@ test("Leading-edge behavior is correct", () => {
   assert(result.ok, result.output ? `\n${result.output}` : "Behavioral tests failed");
 });
 
-summary("dnMwNWRlYm91bmNl");
+summary("ZjJ0LWx6eDg=");

@@ -72,4 +72,4 @@ test("logLevels and capitalsByCountry have correct values", () => {
   assert(result.ok, result.output ? `\n${result.output}` : "Behavioral tests failed");
 });
 
-summary("dnMwNW1hcHNldA==");
+summary("aDRyLW14azI=");

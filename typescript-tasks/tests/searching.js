@@ -74,4 +74,4 @@ test("Both functions return correct results", () => {
   assert(result.ok, result.output ? `\n${result.output}` : "Behavioral tests failed");
 });
 
-summary("dnMwNXNlYXJjaA==");
+summary("cTluLWJ2dzM=");
