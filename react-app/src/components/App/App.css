@@ -1,9 +1,9 @@
 .app {
-  width: 100%;
+  font-family: "Work Sans", Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+  background: rgb(242 241 238);
   display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  justify-content: center;
   align-items: flex-start;
-  padding: 2rem 1rem;
+  justify-content: center;
+  padding: 48px 24px;
 }
