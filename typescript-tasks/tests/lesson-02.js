@@ -22,41 +22,47 @@ function read(relPath) {
   }
 }
 
-console.log("\nDebouncing\n");
+console.log("\nMap and Set\n");
 
-runCompileGate(root, { tsconfig: "tsconfig.04.json" });
+runCompileGate(root, { tsconfig: "tsconfig.02.json" });
 
-const src = read("04-debouncing/debounce.ts");
+const src = read("02-map-set/map-set.ts");
 
-test("debounce.ts exists", () => {
-  assert(src !== null, "04-debouncing/debounce.ts not found");
+test("map-set.ts exists", () => {
+  assert(src !== null, "02-map-set/map-set.ts not found");
 });
 
-test("debounce is exported", () => {
+test("logLevels is assigned a new Set", () => {
   assert(
-    (src && src.includes("export function debounce")) ||
-      (src && src.includes("export const debounce")),
-    "debounce is not exported — export a function named debounce",
+    src && /logLevels\s*=\s*new\s+Set\s*\(/.test(src),
+    "logLevels should be assigned with new Set(...)",
   );
 });
 
-test("debounce uses setTimeout", () => {
+test("capitalByCountry is assigned a new Map", () => {
   assert(
-    src && src.includes("setTimeout"),
-    "debounce should use setTimeout to schedule the delay",
+    src && /capitalByCountry\s*=\s*new\s+Map\s*\(/.test(src),
+    "capitalByCountry should be assigned with new Map(...)",
   );
 });
 
-test("debounce uses clearTimeout", () => {
+test("logLevels is built from the logs array (not hardcoded)", () => {
   assert(
-    src && src.includes("clearTimeout"),
-    "debounce should use clearTimeout to cancel previous timers",
+    src && src.includes("logs"),
+    "logLevels should be built from the logs array, not hardcoded",
   );
 });
 
-test("Leading-edge behavior is correct", () => {
+test("capitalByCountry is built from the countries array (not hardcoded)", () => {
+  assert(
+    src && src.includes("countries"),
+    "capitalByCountry should be built from the countries array, not hardcoded",
+  );
+});
+
+test("logLevels and capitalsByCountry have correct values", () => {
   const result = withIndicator("Running tests...", () =>
-    checkBehavior(root, "tests/lib/debouncing.behavior.ts"),
+    checkBehavior(root, "tests/lib/map-set.behavior.ts"),
   );
   if (result.timedOut) {
     throw new Error(
@@ -66,4 +72,4 @@ test("Leading-edge behavior is correct", () => {
   assert(result.ok, result.output ? `\n${result.output}` : "Behavioral tests failed");
 });
 
-summary("ZjJ0LWx6eDg=");
+summary("aDRyLW14azI=");
