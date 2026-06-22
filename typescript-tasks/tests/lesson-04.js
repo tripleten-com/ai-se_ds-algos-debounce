@@ -22,49 +22,41 @@ function read(relPath) {
   }
 }
 
-console.log("\nSearching\n");
+console.log("\nDebouncing\n");
 
-runCompileGate(root, { tsconfig: "tsconfig.03.json" });
+runCompileGate(root, { tsconfig: "tsconfig.04.json" });
 
-const src = read("03-searching/search.ts");
+const src = read("04-debouncing/debounce.ts");
 
-test("search.ts exists", () => {
-  assert(src !== null, "03-searching/search.ts not found");
+test("debounce.ts exists", () => {
+  assert(src !== null, "04-debouncing/debounce.ts not found");
 });
 
-test("linearSearch is exported", () => {
+test("debounce is exported", () => {
   assert(
-    src && src.includes("linearSearch"),
-    "linearSearch is not defined — add a function named linearSearch",
+    (src && src.includes("export function debounce")) ||
+      (src && src.includes("export const debounce")),
+    "debounce is not exported — export a function named debounce",
   );
 });
 
-test("binarySearch is exported", () => {
+test("debounce uses setTimeout", () => {
   assert(
-    src && src.includes("binarySearch"),
-    "binarySearch is not defined — add a function named binarySearch",
+    src && src.includes("setTimeout"),
+    "debounce should use setTimeout to schedule the delay",
   );
 });
 
-test("linearSearch uses a loop (not Array methods)", () => {
+test("debounce uses clearTimeout", () => {
   assert(
-    src && src.includes("for") && !src.match(/\.indexOf|\.find\b|\.includes\b/),
-    "linearSearch should use a loop, not built-in Array search methods",
+    src && src.includes("clearTimeout"),
+    "debounce should use clearTimeout to cancel previous timers",
   );
 });
 
-test("binarySearch uses numeric comparison (not localeCompare)", () => {
-  assert(
-    src &&
-      !src.includes("localeCompare") &&
-      (src.includes("<") || src.includes(">")),
-    "binarySearch should compare numbers with < and >, not localeCompare",
-  );
-});
-
-test("Both functions return correct results", () => {
+test("Leading-edge behavior is correct", () => {
   const result = withIndicator("Running tests...", () =>
-    checkBehavior(root, "tests/lib/searching.behavior.ts"),
+    checkBehavior(root, "tests/lib/debouncing.behavior.ts"),
   );
   if (result.timedOut) {
     throw new Error(
@@ -74,4 +66,4 @@ test("Both functions return correct results", () => {
   assert(result.ok, result.output ? `\n${result.output}` : "Behavioral tests failed");
 });
 
-summary("cTluLWJ2dzM=");
+summary("ZjJ0LWx6eDg=");

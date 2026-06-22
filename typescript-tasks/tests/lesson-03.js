@@ -22,47 +22,49 @@ function read(relPath) {
   }
 }
 
-console.log("\nMap and Set\n");
+console.log("\nSearching\n");
 
-runCompileGate(root, { tsconfig: "tsconfig.02.json" });
+runCompileGate(root, { tsconfig: "tsconfig.03.json" });
 
-const src = read("02-map-set/map-set.ts");
+const src = read("03-searching/search.ts");
 
-test("map-set.ts exists", () => {
-  assert(src !== null, "02-map-set/map-set.ts not found");
+test("search.ts exists", () => {
+  assert(src !== null, "03-searching/search.ts not found");
 });
 
-test("logLevels is assigned a new Set", () => {
+test("linearSearch is exported", () => {
   assert(
-    src && /logLevels\s*=\s*new\s+Set\s*\(/.test(src),
-    "logLevels should be assigned with new Set(...)",
+    src && src.includes("linearSearch"),
+    "linearSearch is not defined — add a function named linearSearch",
   );
 });
 
-test("capitalByCountry is assigned a new Map", () => {
+test("binarySearch is exported", () => {
   assert(
-    src && /capitalByCountry\s*=\s*new\s+Map\s*\(/.test(src),
-    "capitalByCountry should be assigned with new Map(...)",
+    src && src.includes("binarySearch"),
+    "binarySearch is not defined — add a function named binarySearch",
   );
 });
 
-test("logLevels is built from the logs array (not hardcoded)", () => {
+test("linearSearch uses a loop (not Array methods)", () => {
   assert(
-    src && src.includes("logs"),
-    "logLevels should be built from the logs array, not hardcoded",
+    src && src.includes("for") && !src.match(/\.indexOf|\.find\b|\.includes\b/),
+    "linearSearch should use a loop, not built-in Array search methods",
   );
 });
 
-test("capitalByCountry is built from the countries array (not hardcoded)", () => {
+test("binarySearch uses numeric comparison (not localeCompare)", () => {
   assert(
-    src && src.includes("countries"),
-    "capitalByCountry should be built from the countries array, not hardcoded",
+    src &&
+      !src.includes("localeCompare") &&
+      (src.includes("<") || src.includes(">")),
+    "binarySearch should compare numbers with < and >, not localeCompare",
   );
 });
 
-test("logLevels and capitalsByCountry have correct values", () => {
+test("Both functions return correct results", () => {
   const result = withIndicator("Running tests...", () =>
-    checkBehavior(root, "tests/lib/map-set.behavior.ts"),
+    checkBehavior(root, "tests/lib/searching.behavior.ts"),
   );
   if (result.timedOut) {
     throw new Error(
@@ -72,4 +74,4 @@ test("logLevels and capitalsByCountry have correct values", () => {
   assert(result.ok, result.output ? `\n${result.output}` : "Behavioral tests failed");
 });
 
-summary("aDRyLW14azI=");
+summary("cTluLWJ2dzM=");
