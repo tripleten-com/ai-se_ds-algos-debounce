@@ -1,4 +1,4 @@
-import { execSync, spawnSync, spawn } from 'child_process';
+import { spawnSync, spawn } from 'child_process';
 import { existsSync } from 'fs';
 import { join } from 'path';
 
@@ -101,17 +101,20 @@ export function normalize(content) {
  * Type-checks the project with TypeScript.
  */
 export function checkCompiles(root, { tsconfig = 'tsconfig.json' } = {}) {
-  const tsc = join(root, 'node_modules/.bin/tsc');
+  const tsc = join(root, 'node_modules/typescript/lib/tsc.js');
   if (!existsSync(tsc)) {
     return { ok: false, output: 'TypeScript not installed — run `npm install` from the typescript-tasks folder' };
   }
-  try {
-    execSync(`"${tsc}" --noEmit --project ${tsconfig}`, { cwd: root, stdio: 'pipe' });
+  const proc = spawnSync(process.execPath, [tsc, '--noEmit', '--project', tsconfig], {
+    cwd: root,
+    stdio: 'pipe',
+    encoding: 'utf8',
+  });
+  if (proc.status === 0) {
     return { ok: true, output: '' };
-  } catch (err) {
-    const output = err.stderr?.toString() || err.stdout?.toString() || '(no output)';
-    return { ok: false, output };
   }
+  const output = proc.stderr || proc.stdout || '(no output)';
+  return { ok: false, output };
 }
 
 /**
@@ -119,11 +122,11 @@ export function checkCompiles(root, { tsconfig = 'tsconfig.json' } = {}) {
  * captures the assertion message from stderr.
  */
 export function checkBehavior(root, testFile, { timeout = 8000 } = {}) {
-  const tsx = join(root, 'node_modules/.bin/tsx');
+  const tsx = join(root, 'node_modules/tsx/dist/cli.mjs');
   if (!existsSync(tsx)) {
     return { ok: false, timedOut: false, output: 'tsx not installed — run `npm install` from the typescript-tasks folder' };
   }
-  const proc = spawnSync(tsx, [testFile], {
+  const proc = spawnSync(process.execPath, [tsx, testFile], {
     cwd: root,
     stdio: 'pipe',
     timeout,
